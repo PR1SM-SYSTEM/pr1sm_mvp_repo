@@ -1,5 +1,26 @@
 async function fetchJSON(url){ const r = await fetch(url); if(!r.ok) throw new Error('HTTP '+r.status); return r.json(); }
 
+async function loadData() {
+  try {
+    const res = await fetch('/data/morning.json?v=' + Date.now(), { cache: 'no-store' });
+    if (!res.ok) throw new Error('Fetch failed: ' + res.status);
+    const data = await res.json();
+    window.__DATA = data; // debug helper
+    render(data);         // whatever your current render fn is called
+  } catch (err) {
+    console.error(err);
+    // fall back to any built-in sample data if you keep one
+    if (window.__FALLBACK_DATA) render(window.__FALLBACK_DATA);
+  }
+}
+
+// call it on page load
+loadData();
+
+// optional: wire your “Refresh” button
+document.getElementById('refreshBtn')?.addEventListener('click', loadData);
+
+
 async function loadMorning(){
   const pack = await fetchJSON('/morning');
   renderReddit(pack.reddit_top || []);
