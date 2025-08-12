@@ -27,13 +27,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
 
-async function loadMorning(){
-  const pack = await fetchJSON('/morning');
-  renderReddit(pack.reddit_top || []);
-  renderYouTube(pack.youtube_picks || []);
-  renderTerms(pack.trending_terms || []);
-  document.getElementById('updated').textContent = 'Last updated: ' + new Date(pack.updated_at).toLocaleString();
-}
+
 
 function renderReddit(items){
 
@@ -130,8 +124,8 @@ async function speakGreeting(){
 document.getElementById('btnGreet').addEventListener('click', speakGreeting);
 document.getElementById('btnRefresh').addEventListener('click', async()=>{
   await fetch('/trigger-morning', {method:'POST'});
-  loadMorning();
+
 });
 
 loadGreeting();
-loadMorning();
+
