@@ -1,24 +1,30 @@
-async function fetchJSON(url){ const r = await fetch(url); if(!r.ok) throw new Error('HTTP '+r.status); return r.json(); }
+async function fetchJSON(url) {
+  const r = await fetch(url, { cache: 'no-store' });
+  if (!r.ok) throw new Error('HTTP ' + r.status);
+  return r.json();
+}
 
+// single source of truth for loading + wiring the UI
 async function loadData() {
   try {
-    const res = await fetch('/data/morning.json?v=' + Date.now(), { cache: 'no-store' });
-    if (!res.ok) throw new Error('Fetch failed: ' + res.status);
-    const data = await res.json();
-    window.__DATA = data; // debug helper
-    render(data);         // whatever your current render fn is called
+    const pack = await fetchJSON('/data/morning.json?v=' + Date.now());
+    window.__DATA = pack;                        // handy for debugging
+    renderReddit(pack.reddit_top || []);
+    renderYouTube(pack.youtube_picks || []);
+    renderTerms(pack.trending_terms || []);
+    const ts = pack.updated_at ? new Date(pack.updated_at) : new Date();
+    document.getElementById('updated').textContent = 'Last updated: ' + ts.toLocaleString();
   } catch (err) {
     console.error(err);
-    // fall back to any built-in sample data if you keep one
-    if (window.__FALLBACK_DATA) render(window.__FALLBACK_DATA);
   }
 }
 
-// call it on page load
-loadData();
+// run once DOM is ready, and wire Refresh
+document.addEventListener('DOMContentLoaded', () => {
+  loadData();
+  document.getElementById('refreshBtn')?.addEventListener('click', loadData);
+});
 
-// optional: wire your “Refresh” button
-document.getElementById('refreshBtn')?.addEventListener('click', loadData);
 
 
 async function loadMorning(){
