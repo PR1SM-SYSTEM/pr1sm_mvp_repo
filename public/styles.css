@@ -1,19 +1,137 @@
-*{box-sizing:border-box}body{font-family:system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif;margin:0;background:#0b0b0f;color:#eaeaf0}
-header{display:flex;justify-content:space-between;align-items:center;padding:16px 20px;position:sticky;top:0;background:#0b0b0f;border-bottom:1px solid #1c1c22}
-h1{margin:0;font-size:20px;letter-spacing:2px}
-.controls button{margin-left:8px;background:#1f2333;border:1px solid #2b2f42;border-radius:10px;color:#eaeaf0;padding:10px 12px;font-weight:600}
-.controls button:active{transform:scale(0.98)}
-section{padding:14px 20px}
-h2{margin:10px 0 12px 0;font-size:18px}
-.grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
-.card{background:#13141a;border:1px solid #1e2130;border-radius:14px;overflow:hidden}
-.card img{width:100%;height:120px;object-fit:cover;display:block}
-.card .meta{padding:10px 12px}
-.meta .title{font-weight:600;margin:0 0 6px 0}
-.meta .sub{opacity:0.7;font-size:12px}
-.meta .actions{display:flex;justify-content:space-between;margin-top:8px}
-a.btn,a.btn:visited{background:#1f2333;border:1px solid #2b2f42;border-radius:8px;color:#eaeaf0;padding:6px 10px;text-decoration:none;font-size:13px}
-ul{margin:0;padding-left:18px}
-#greetingText{opacity:0.9;padding:0 20px}
-#updated{padding:12px 20px;opacity:0.6;font-size:12px}
-@media (prefers-reduced-motion: reduce){*{animation:none !important;transition:none !important}}
+/* ====== PR1SM – Dark UI Revamp ====== */
+
+/* Font -------------------------------------------------------------------- */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap');
+
+:root{
+  --bg-0: #0b0d10;         /* page */
+  --bg-1: #0f1216;         /* panels */
+  --bg-2: #12161c;         /* cards */
+  --text-1: #e9eef7;       /* main text */
+  --text-2: #a9b4c2;       /* muted text */
+  --brand: #7c9eff;        /* PR1SM accent */
+  --brand-2: #35e0b9;      /* secondary accent */
+  --ring: rgba(124,158,255,.35);
+  --border: rgba(255,255,255,.06);
+  --shadow: 0 10px 30px rgba(0,0,0,.45);
+  --radius: 18px;
+}
+
+/* Layout ------------------------------------------------------------------ */
+* { box-sizing: border-box; }
+html, body { height: 100%; }
+body{
+  margin:0;
+  background: radial-gradient(1200px 600px at 15% -10%, #16202e 0%, transparent 60%) ,
+              radial-gradient(900px 500px at 90% -10%, #1a1325 0%, transparent 60%),
+              var(--bg-0);
+  color: var(--text-1);
+  font: 16px/1.55 Inter, system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+}
+
+.container{
+  width: min(1200px, 92vw);
+  margin: 48px auto 72px;
+}
+
+/* Header ------------------------------------------------------------------ */
+.header{
+  display:flex; align-items:center; justify-content:space-between;
+  gap:16px; margin-bottom:28px;
+}
+.brand{
+  display:flex; align-items:center; gap:10px; font-weight:800; letter-spacing:.05em;
+}
+.brand-dot{
+  width:14px; height:14px; border-radius:50%;
+  background: radial-gradient(circle at 30% 30%, #adffe9 0%, #35e0b9 30%, #147a66 100%);
+  box-shadow: 0 0 0 6px rgba(53,224,185,.12);
+}
+
+/* Buttons ----------------------------------------------------------------- */
+.btn{
+  appearance:none; border:1px solid var(--border); color:var(--text-1);
+  background: linear-gradient(180deg, var(--bg-1), var(--bg-2));
+  padding:10px 14px; border-radius:12px; font-weight:600;
+  box-shadow: 0 1px 0 rgba(255,255,255,.06) inset;
+  transition: transform .15s ease, border-color .15s ease, box-shadow .15s ease;
+}
+.btn:hover{ transform: translateY(-1px); border-color: var(--ring); box-shadow: 0 8px 20px rgba(0,0,0,.35); }
+.btn:active{ transform: translateY(0); }
+.btn--primary{ border-color: transparent; background: linear-gradient(180deg, #8aa6ff, #557dff); color:#0a0f1a; }
+
+/* Section titles ---------------------------------------------------------- */
+.h-sub{
+  color: var(--text-2);
+  font-weight: 800;
+  letter-spacing: .04em;
+  margin: 34px 0 18px;
+}
+
+/* Grid -------------------------------------------------------------------- */
+.grid{
+  display:grid;
+  grid-template-columns: repeat(auto-fit, minmax(320px,1fr));
+  gap: 22px;
+}
+
+/* Cards ------------------------------------------------------------------- */
+.card{
+  background: linear-gradient(180deg, rgba(255,255,255,.02), rgba(255,255,255,.00)) , var(--bg-2);
+  border:1px solid var(--border);
+  border-radius: var(--radius);
+  overflow:hidden;
+  box-shadow: var(--shadow);
+  transition: transform .18s ease, box-shadow .18s ease, border-color .18s ease;
+}
+.card:hover{ transform: translateY(-3px); border-color: var(--ring); box-shadow: 0 18px 40px rgba(0,0,0,.55); }
+
+.card img{
+  display:block; width:100%;
+  aspect-ratio: 16/9; object-fit: cover; object-position: center;
+  background:#0c0f13;
+}
+
+.card .meta{ padding:14px 16px 6px; }
+.card .title{
+  font-weight: 700;
+  letter-spacing: .01em;
+  margin-bottom: 8px;
+}
+.card .sub{
+  color:var(--text-2);
+  font-size:.92rem;
+  display:flex; align-items:center; gap:10px;
+}
+
+/* Actions ----------------------------------------------------------------- */
+.actions{ display:flex; gap:10px; padding:12px 16px 16px; }
+
+/* List pills -------------------------------------------------------------- */
+.list{
+  display:grid; gap:10px;
+  background: linear-gradient(180deg, rgba(255,255,255,.02), rgba(255,255,255,.00)) , var(--bg-2);
+  border:1px solid var(--border);
+  border-radius: var(--radius);
+  padding:14px;
+  box-shadow: var(--shadow);
+}
+.item{
+  display:flex; align-items:center; gap:12px;
+  padding:10px 10px;
+  border-radius:10px;
+  transition: background .15s ease, transform .15s ease;
+}
+.item:hover{ background: rgba(255,255,255,.02); transform: translateX(2px); }
+.dot{
+  width:10px; height:10px; border-radius:50%;
+  background: radial-gradient(circle at 30% 30%, #b5c7ff 0%, #7c9eff 40%, #3f55bd 100%);
+  box-shadow: 0 0 0 5px rgba(124,158,255,.12);
+}
+.item a{ color: var(--text-1); text-decoration:none; }
+.item a:hover{ text-decoration: underline; }
+
+/* Footer timestamp -------------------------------------------------------- */
+.footer{
+  margin-top:22px; color:var(--text-2); font-size:.9rem;
+}
