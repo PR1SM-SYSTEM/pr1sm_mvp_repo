@@ -1,0 +1,72 @@
+async function fetchJSON(url){ const r = await fetch(url); if(!r.ok) throw new Error('HTTP '+r.status); return r.json(); }
+
+async function loadMorning(){
+  const pack = await fetchJSON('/morning');
+  renderReddit(pack.reddit_top || []);
+  renderYouTube(pack.youtube_picks || []);
+  renderTerms(pack.trending_terms || []);
+  document.getElementById('updated').textContent = 'Last updated: ' + new Date(pack.updated_at).toLocaleString();
+}
+
+function renderReddit(items){
+  const root = document.getElementById('reddit'); root.innerHTML='';
+  items.forEach(p=>{
+    const el = document.createElement('article');
+    el.className='card';
+    el.innerHTML = `
+      <img src="${p.image}" alt="${p.title}"/>
+      <div class="meta">
+        <div class="title">${p.title}</div>
+        <div class="sub">r/${p.sub} • ⬆ ${p.ups.toLocaleString()}</div>
+        <div class="actions">
+          <a class="btn" href="${p.permalink}" target="_blank" rel="noopener">Open</a>
+          <a class="btn" href="${p.permalink}#comment" target="_blank" rel="noopener">Comment</a>
+        </div>
+      </div>`;
+    root.appendChild(el);
+  });
+}
+
+function renderYouTube(items){
+  const ul = document.getElementById('youtube'); ul.innerHTML='';
+  items.forEach(v=>{
+    const li=document.createElement('li');
+    li.innerHTML = `<a href="${v.url}" target="_blank" rel="noopener">${v.title}</a>`;
+    ul.appendChild(li);
+  });
+}
+
+function renderTerms(items){
+  const ul = document.getElementById('terms'); ul.innerHTML='';
+  items.forEach(t=>{
+    const li=document.createElement('li'); li.textContent=t; ul.appendChild(li);
+  });
+}
+
+async function loadGreeting(){
+  try{
+    const g = await fetchJSON('/greeting');
+    const el = document.getElementById('greetingText'); el.textContent = g.text;
+    return g.text;
+  }catch(e){
+    return "Good morning, Benedict.";
+  }
+}
+
+async function speakGreeting(){
+  const text = await loadGreeting();
+  if (!('speechSynthesis' in window)) { alert(text); return; }
+  const utter = new SpeechSynthesisUtterance(text);
+  utter.rate = 1.0; utter.pitch = 1.0; utter.lang = 'en-US';
+  window.speechSynthesis.cancel();
+  window.speechSynthesis.speak(utter);
+}
+
+document.getElementById('btnGreet').addEventListener('click', speakGreeting);
+document.getElementById('btnRefresh').addEventListener('click', async()=>{
+  await fetch('/trigger-morning', {method:'POST'});
+  loadMorning();
+});
+
+loadGreeting();
+loadMorning();

@@ -1,0 +1,39 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>PR1SM — Morning</title>
+<link rel="stylesheet" href="/styles.css" />
+</head>
+<body>
+  <header>
+    <h1>PR1SM</h1>
+    <div class="controls">
+      <button id="btnGreet">Play greeting</button>
+      <button id="btnRefresh">Refresh</button>
+    </div>
+  </header>
+
+  <section class="greeting" id="greetingText">Loading greeting…</section>
+
+  <section>
+    <h2>Reddit Top 3</h2>
+    <div id="reddit" class="grid"></div>
+  </section>
+
+  <section>
+    <h2>YouTube Picks</h2>
+    <ul id="youtube"></ul>
+  </section>
+
+  <section>
+    <h2>Trending Terms & Memes</h2>
+    <ul id="terms"></ul>
+  </section>
+
+  <footer id="updated"></footer>
+
+<script src="/app.js"></script>
+</body>
+</html>

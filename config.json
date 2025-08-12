@@ -1,0 +1,7 @@
+{
+  "reddit": {
+    "subs": ["memes", "interestingasfuck", "gaming"],
+    "limit": 3,
+    "timeframe": "day"   // options: hour, day, week, month, year, all
+  }
+}

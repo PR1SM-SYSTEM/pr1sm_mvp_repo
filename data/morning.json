@@ -1,0 +1,48 @@
+{
+  "updated_at": "2025-08-12T15:54:16.921Z",
+  "reddit_top": [
+    {
+      "id": "abc123",
+      "sub": "memes",
+      "title": "Programmer humor be like",
+      "image": "https://picsum.photos/seed/meme1/600/400",
+      "permalink": "https://reddit.com/r/memes/comments/abc123",
+      "ups": 4200
+    },
+    {
+      "id": "def456",
+      "sub": "interestingasfuck",
+      "title": "Perfectly round ice disc",
+      "image": "https://picsum.photos/seed/meme2/600/400",
+      "permalink": "https://reddit.com/r/interestingasfuck/comments/def456",
+      "ups": 11800
+    },
+    {
+      "id": "ghi789",
+      "sub": "gaming",
+      "title": "Best games under R200",
+      "image": "https://picsum.photos/seed/meme3/600/400",
+      "permalink": "https://reddit.com/r/gaming/comments/ghi789",
+      "ups": 5900
+    }
+  ],
+  "youtube_picks": [
+    {
+      "title": "10 Underrated Sci‑Fi Movies",
+      "url": "https://youtu.be/dQw4w9WgXcQ"
+    },
+    {
+      "title": "Beginner’s Guide to Surf Fishing",
+      "url": "https://youtu.be/dQw4w9WgXcQ"
+    },
+    {
+      "title": "New Strategy Game Tips",
+      "url": "https://youtu.be/dQw4w9WgXcQ"
+    }
+  ],
+  "trending_terms": [
+    "midwit",
+    "browser fingerprinting",
+    "this is NOT going well…"
+  ]
+}
