@@ -1,0 +1,34 @@
+{
+  "updated_at": "2025-08-12T15:54:16Z",
+  "reddit_top": [
+    {
+      "id": "abc123",
+      "sub": "Helldivers",
+      "title": "Programmer humor be like",
+      "image": "https://i.redd.it/abc123.jpg",
+      "permalink": "https://reddit.com/r/memes/comments/abc123",
+      "ups": 4200
+    },
+    {
+      "id": "def456",
+      "sub": "BrosBeingBros",
+      "title": "Perfectly round ice disc",
+      "image": "https://i.redd.it/def456.jpg",
+      "permalink": "https://reddit.com/r/interestingasfuck/comments/def456",
+      "ups": 11800
+    },
+    {
+      "id": "ghi789",
+      "sub": "madlads",
+      "title": "New chip packs crazy efficiency gains",
+      "image": "https://i.redd.it/ghi789.jpg",
+      "permalink": "https://reddit.com/r/technology/comments/ghi789",
+      "ups": 8600
+    }
+  ],
+  "trending_terms": [
+    "midwit",
+    "browser fingerprinting",
+    "this is NOT going well"
+  ]
+}
