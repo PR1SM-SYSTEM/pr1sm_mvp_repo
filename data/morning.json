@@ -1,4 +1,8 @@
-{
+{// somewhere in your render loop:
+const img = document.createElement('img');
+img.src = item.image || item.thumbnail || '/fallback.jpg';
+thumbEl.appendChild(img);
+
   "updated_at": "2025-08-12T15:54:16.921Z",
   "reddit_top": [
     {
@@ -39,7 +43,18 @@
       "title": "New Strategy Game Tips",
       "url": "https://youtu.be/dQw4w9WgXcQ"
     }
-  ],
+  ],{
+  "reddit": [
+    {
+      "sub": "r/memes",
+      "title": "Programmer humor be like",
+      "url": "https://reddit.com/r/memes/...",
+      "upvotes": 4200,
+      "image": "https://i.redd.it/abc123.jpg"
+    }
+  ]
+}
+
   "trending_terms": [
     "midwit",
     "browser fingerprinting",
