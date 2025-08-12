@@ -30,6 +30,44 @@ async function loadMorning(){
 }
 
 function renderReddit(items){
+
+function renderReddit(items) {
+  const root = document.getElementById('reddit');
+  root.innerHTML = '';
+
+  // Fallback in case items is undefined or empty
+  if (!Array.isArray(items) || items.length === 0) {
+    root.innerHTML = '<p>No Reddit data available.</p>';
+    return;
+  }
+
+  items.forEach(item => {
+    const el = document.createElement('article');
+    el.className = 'card';
+
+    // Use item.image with a safe fallback
+    const imgSrc = item.image || 'fallback-image.jpg';
+    const title = item.title || 'No title';
+    const sub = item.sub || 'Unknown subreddit';
+    const ups = item.ups != null ? item.ups.toLocaleString() : '0';
+    const permalink = item.permalink || '#';
+
+    el.innerHTML = `
+      <img src="${imgSrc}" alt="${title}"/>
+      <div class="meta">
+        <div class="title">${title}</div>
+        <div class="sub">r/${sub} ↑ ${ups}</div>
+        <div class="actions">
+          <a class="btn" href="${permalink}" target="_blank" rel="noopener">Open</a>
+          <a class="btn" href="${permalink}#comment" target="_blank" rel="noopener">Comment</a>
+        </div>
+      </div>
+    `;
+    root.appendChild(el);
+  });
+}
+
+  
   const root = document.getElementById('reddit'); root.innerHTML='';
   items.forEach(p=>{
     const el = document.createElement('article');
