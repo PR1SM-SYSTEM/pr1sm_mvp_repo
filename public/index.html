@@ -1,18 +1,15 @@
 <!doctype html>
 <html lang="en">
-  <link rel="stylesheet" href="./styles.css?v=5" />
-<script defer src="./app.js?v=5"></script>
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>PR1SM</title>
 
-  <!-- Font -->
+  <!-- Fonts & CSS -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;800&display=swap" rel="stylesheet">
-
-
+  <link rel="stylesheet" href="./styles.css?v=10" />
 </head>
 
 <body>
@@ -29,112 +26,39 @@
     </div>
 
     <!-- Greeting -->
-    <div id="greeting" class="greeting">Good evening, Benedict. Here are your highlights for today.</div>
+    <div id="greetingText" class="greeting">
+      Good evening, Benedict. Here are your highlights for today.
+    </div>
 
     <!-- Reddit -->
     <div class="section">
       <h2>Reddit Top 3</h2>
-      <div id="reddit-grid" class="grid">
-        <!-- Example card – your app.js can replace/append here -->
-        <article class="card">
-          <div class="media"><img src="https://images.unsplash.com/photo-1511920170033-f8396924c348?q=80&w=1200&auto=format&fit=crop" alt=""></div>
-          <div class="body">
-            <div class="meta">
-              <span class="chip">r/memes</span>
-              <span>•</span>
-              <span>↑ 4,200</span>
-            </div>
-            <div class="title">Programmer humor be like</div>
-          </div>
-          <div class="actions">
-            <button class="btn">Open</button>
-            <button class="btn ghost">Comment</button>
-          </div>
-        </article>
-
-        <article class="card">
-          <div class="media"><img src="https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?q=80&w=1200&auto=format&fit=crop" alt=""></div>
-          <div class="body">
-            <div class="meta">
-              <span class="chip">r/interestingasf</span>
-              <span>•</span>
-              <span>↑ 11,800</span>
-            </div>
-            <div class="title">Perfectly round ice disc</div>
-          </div>
-          <div class="actions">
-            <button class="btn">Open</button>
-            <button class="btn ghost">Comment</button>
-          </div>
-        </article>
-
-        <article class="card">
-          <div class="media"><img src="https://images.unsplash.com/photo-1491553895911-0055eca6402d?q=80&w=1200&auto=format&fit=crop" alt=""></div>
-          <div class="body">
-            <div class="meta">
-              <span class="chip">r/gaming</span>
-              <span>•</span>
-              <span>↑ 5,900</span>
-            </div>
-            <div class="title">Best games under R200</div>
-          </div>
-          <div class="actions">
-            <button class="btn">Open</button>
-            <button class="btn ghost">Comment</button>
-          </div>
-        </article>
-      </div>
+      <!-- app.js will populate this -->
+      <div id="reddit" class="grid"></div>
     </div>
 
     <!-- YouTube -->
     <div class="section">
       <h2>YouTube Picks</h2>
-      <ul id="youtube-list" class="list">
-        <li><a href="#"><span class="dot"></span>10 Underrated Sci-Fi Movies</a></li>
-        <li><a href="#"><span class="dot"></span>Beginner’s Guide to Surf Fishing</a></li>
-        <li><a href="#"><span class="dot"></span>New Strategy Game Tips</a></li>
-      </ul>
+      <!-- app.js will populate this -->
+      <ul id="youtube" class="list"></ul>
     </div>
 
     <!-- Trending -->
     <div class="section">
       <h2>Trending Terms &amp; Memes</h2>
-      <div id="trending-list" class="list">
-        <a href="#"><span class="dot"></span>midwit</a>
-        <a href="#"><span class="dot"></span>browser fingerprinting</a>
-        <a href="#"><span class="dot"></span>this is NOT going well…</a>
-      </div>
+      <!-- app.js will populate this -->
+      <ul id="terms" class="list"></ul>
     </div>
 
     <!-- Footer -->
     <div class="footer">
       <span class="pulse"></span>
-      <span id="updatedAt">Last updated: just now</span>
+      <span id="updated">Last updated: just now</span>
     </div>
   </div>
 
-  <!-- Small helpers (non-conflicting). Your existing app.js can still take over. -->
-  <script>
-    // Update timestamp on load
-    const el = document.getElementById('updatedAt');
-    if (el) {
-      const d = new Date();
-      el.textContent = `Last updated: ${d.toLocaleString()}`;
-    }
-
-    // Hook up buttons if your app.js doesn’t already
-    document.getElementById('refreshBtn')?.addEventListener('click', ()=>location.reload());
-    document.getElementById('playBtn')?.addEventListener('click', ()=>{
-      fetch('/greeting').then(r=>r.json?.()||r.text()).then(()=>{
-        // your server plays audio or returns greeting; no-op here.
-      }).catch(()=>{});
-    });
-  </script>
-
-  <!-- Keep your existing functionality -->
-  <script defer src="app.js"></script>
-  <script defer src="./app.js?v=8"></script>
-
+  <!-- Single source of truth: load your JS once with a cache-bust -->
+  <script defer src="./app.js?v=9"></script>
 </body>
 </html>
-
