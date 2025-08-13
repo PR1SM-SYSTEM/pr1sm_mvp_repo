@@ -1,31 +1,64 @@
-<!-- Greeting -->
-<div id="greetingText" class="greeting">
-  Good evening, Benedict. Here are your highlights for today.
-</div>
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>PR1SM</title>
 
-<!-- Reddit -->
-<div class="section">
-  <h2>Reddit Top 3</h2>
-  <!-- app.js will populate this -->
-  <div id="reddit" class="grid"></div>
-</div>
+  <!-- Fonts & CSS -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="./styles.css?v=10" />
+</head>
 
-<!-- YouTube -->
-<div class="section">
-  <h2>YouTube Picks</h2>
-  <!-- app.js will populate this -->
-  <ul id="youtube" class="list"></ul>
-</div>
+<body>
+  <div class="wrap">
+    <!-- Top Bar -->
+    <div class="topbar">
+      <div class="logo">
+        <div class="dot"></div>
+        <h1>PR1SM</h1>
+      </div>
+      <div class="spacer"></div>
+      <button id="playBtn" class="btn ghost">▶︎ Play greeting</button>
+      <button id="refreshBtn" class="btn primary">⟳ Refresh</button>
+    </div>
 
-<!-- Trending -->
-<div class="section">
-  <h2>Trending Terms &amp; Memes</h2>
-  <!-- app.js will populate this -->
-  <ul id="terms" class="list"></ul>
-</div>
+    <!-- Greeting -->
+    <div id="greetingText" class="greeting">
+      Good evening, Benedict. Here are your highlights for today.
+    </div>
 
-<!-- Footer -->
-<div class="footer">
-  <span class="pulse"></span>
-  <span id="updated">Last updated: just now</span>
-</div>
+    <!-- Reddit -->
+    <div class="section">
+      <h2>Reddit Top 3</h2>
+      <!-- app.js will populate this -->
+      <div id="reddit" class="grid"></div>
+    </div>
+
+    <!-- YouTube -->
+    <div class="section">
+      <h2>YouTube Picks</h2>
+      <!-- app.js will populate this -->
+      <ul id="youtube" class="list"></ul>
+    </div>
+
+    <!-- Trending -->
+    <div class="section">
+      <h2>Trending Terms &amp; Memes</h2>
+      <!-- app.js will populate this -->
+      <ul id="terms" class="list"></ul>
+    </div>
+
+    <!-- Footer -->
+    <div class="footer">
+      <span class="pulse"></span>
+      <span id="updated">Last updated: just now</span>
+    </div>
+  </div>
+
+  <!-- Load JS once with cache-busting -->
+  <script defer src="./app.js?v=10"></script>
+</body>
+</html>
