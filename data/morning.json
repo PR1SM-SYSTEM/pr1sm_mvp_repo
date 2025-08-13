@@ -2,30 +2,31 @@
   "updated_at": "2025-08-12T15:54:16Z",
   "reddit_top": [
     {
-      "id": "abc123",
+      "id": "hld123",
       "sub": "Helldivers",
-      "title": "Programmer humor be like",
-      "image": "https://i.redd.it/abc123.jpg",
-      "permalink": "https://reddit.com/r/memes/comments/abc123",
+      "title": "Helldivers 2 orbital drop montage",
+      "image": "https://images.unsplash.com/photo-1517816428104-797678c7cf0d?auto=format&fit=crop&w=1600&q=80",
+      "permalink": "https://reddit.com/r/Helldivers/comments/hld123",
       "ups": 4200
     },
     {
-      "id": "def456",
+      "id": "bbb456",
       "sub": "BrosBeingBros",
-      "title": "Perfectly round ice disc",
-      "image": "https://i.redd.it/def456.jpg",
-      "permalink": "https://reddit.com/r/interestingasfuck/comments/def456",
+      "title": "Helping a stranger jump a car",
+      "image": "https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?auto=format&fit=crop&w=1600&q=80",
+      "permalink": "https://reddit.com/r/BrosBeingBros/comments/bbb456",
       "ups": 11800
     },
     {
-      "id": "ghi789",
+      "id": "mdl789",
       "sub": "madlads",
-      "title": "New chip packs crazy efficiency gains",
-      "image": "https://i.redd.it/ghi789.jpg",
-      "permalink": "https://reddit.com/r/technology/comments/ghi789",
+      "title": "Teacher promises no homework if class aces quiz",
+      "image": "https://images.unsplash.com/photo-1516387938699-a93567ec168e?auto=format&fit=crop&w=1600&q=80",
+      "permalink": "https://reddit.com/r/madlads/comments/mdl789",
       "ups": 8600
     }
   ],
+  "youtube_picks": [],
   "trending_terms": [
     "midwit",
     "browser fingerprinting",
