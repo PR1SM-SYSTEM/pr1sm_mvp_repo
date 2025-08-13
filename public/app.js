@@ -1,41 +1,18 @@
+// app.js  — v9
+
 async function fetchJSON(url) {
-  const r = await fetch(url, { cache: 'no-store' });
-  if (!r.ok) throw new Error('HTTP ' + r.status);
+  // add a cache-busting param for good measure
+  const sep = url.includes('?') ? '&' : '?';
+  const r = await fetch(url + sep + 't=' + Date.now(), { cache: 'no-store' });
+  if (!r.ok) throw new Error('HTTP ' + r.status + ' fetching ' + url);
   return r.json();
 }
 
-// single source of truth for loading + wiring the UI
-async function loadData() {
-  try {
-    const pack = await fetchJSON('/data/morning.json?v=' + Date.now());
-    window.__DATA = pack;                        // handy for debugging
-    renderReddit(pack.reddit_top || []);
-    renderYouTube(pack.youtube_picks || []);
-    renderTerms(pack.trending_terms || []);
-    const ts = pack.updated_at ? new Date(pack.updated_at) : new Date();
-    document.getElementById('updated').textContent = 'Last updated: ' + ts.toLocaleString();
-  } catch (err) {
-    console.error(err);
-  }
-}
-
-// run once DOM is ready, and wire Refresh
-document.addEventListener('DOMContentLoaded', () => {
-  loadData();
-  document.getElementById('refreshBtn')?.addEventListener('click', loadData);
-});
-
-
-
-
-
-function renderReddit(items){
-
+// ----- RENDERERS -------------------------------------------------------------
 function renderReddit(items) {
   const root = document.getElementById('reddit');
   root.innerHTML = '';
 
-  // Fallback in case items is undefined or empty
   if (!Array.isArray(items) || items.length === 0) {
     root.innerHTML = '<p>No Reddit data available.</p>';
     return;
@@ -45,18 +22,17 @@ function renderReddit(items) {
     const el = document.createElement('article');
     el.className = 'card';
 
-    // Use item.image with a safe fallback
-    const imgSrc = item.image || 'fallback-image.jpg';
-    const title = item.title || 'No title';
-    const sub = item.sub || 'Unknown subreddit';
-    const ups = item.ups != null ? item.ups.toLocaleString() : '0';
-    const permalink = item.permalink || '#';
+    const imgSrc   = item.image || 'fallback-image.jpg';
+    const title    = item.title || 'No title';
+    const sub      = item.sub || 'Unknown';
+    const ups      = item.ups != null ? item.ups.toLocaleString() : '0';
+    const permalink= item.permalink || '#';
 
     el.innerHTML = `
       <img src="${imgSrc}" alt="${title}"/>
       <div class="meta">
         <div class="title">${title}</div>
-        <div class="sub">r/${sub} ↑ ${ups}</div>
+        <div class="sub">r/${sub} • ↑ ${ups}</div>
         <div class="actions">
           <a class="btn" href="${permalink}" target="_blank" rel="noopener">Open</a>
           <a class="btn" href="${permalink}#comment" target="_blank" rel="noopener">Comment</a>
@@ -67,65 +43,84 @@ function renderReddit(items) {
   });
 }
 
-  
-  const root = document.getElementById('reddit'); root.innerHTML='';
-  items.forEach(p=>{
-    const el = document.createElement('article');
-    el.className='card';
-    el.innerHTML = `
-      <img src="${p.image}" alt="${p.title}"/>
-      <div class="meta">
-        <div class="title">${p.title}</div>
-        <div class="sub">r/${p.sub} • ⬆ ${p.ups.toLocaleString()}</div>
-        <div class="actions">
-          <a class="btn" href="${p.permalink}" target="_blank" rel="noopener">Open</a>
-          <a class="btn" href="${p.permalink}#comment" target="_blank" rel="noopener">Comment</a>
-        </div>
-      </div>`;
-    root.appendChild(el);
-  });
-}
-
-function renderYouTube(items){
-  const ul = document.getElementById('youtube'); ul.innerHTML='';
-  items.forEach(v=>{
-    const li=document.createElement('li');
+function renderYouTube(items) {
+  const ul = document.getElementById('youtube');
+  ul.innerHTML = '';
+  (items || []).forEach(v => {
+    const li = document.createElement('li');
     li.innerHTML = `<a href="${v.url}" target="_blank" rel="noopener">${v.title}</a>`;
     ul.appendChild(li);
   });
 }
 
-function renderTerms(items){
-  const ul = document.getElementById('terms'); ul.innerHTML='';
-  items.forEach(t=>{
-    const li=document.createElement('li'); li.textContent=t; ul.appendChild(li);
+function renderTerms(items) {
+  const ul = document.getElementById('terms');
+  ul.innerHTML = '';
+  (items || []).forEach(t => {
+    const li = document.createElement('li');
+    li.textContent = t;
+    ul.appendChild(li);
   });
 }
 
-async function loadGreeting(){
-  try{
-    const g = await fetchJSON('/greeting');
-    const el = document.getElementById('greetingText'); el.textContent = g.text;
-    return g.text;
-  }catch(e){
-    return "Good morning, Benedict.";
+// ----- LOADERS ---------------------------------------------------------------
+async function loadData() {
+  try {
+    const pack = await fetchJSON('/data/morning.json');
+    window.__DATA = pack; // debug helper
+
+    // console sanity log (check sub names here)
+    console.log('[PR1SM] loaded morning.json:', {
+      updated_at: pack.updated_at,
+      firstSub: pack?.reddit_top?.[0]?.sub,
+      firstTitle: pack?.reddit_top?.[0]?.title
+    });
+
+    renderReddit(pack.reddit_top || []);
+    renderYouTube(pack.youtube_picks || []);
+    renderTerms(pack.trending_terms || []);
+
+    const ts = pack.updated_at ? new Date(pack.updated_at) : new Date();
+    const updatedEl = document.getElementById('updated');
+    if (updatedEl) updatedEl.textContent = 'Last updated: ' + ts.toLocaleString();
+  } catch (err) {
+    console.error('[PR1SM] loadData error:', err);
   }
 }
 
-async function speakGreeting(){
+async function loadGreeting() {
+  try {
+    const g = await fetchJSON('/greeting');
+    const el = document.getElementById('greetingText');
+    if (el) el.textContent = g.text;
+    return g.text;
+  } catch {
+    return 'Good morning, Benedict.';
+  }
+}
+
+async function speakGreeting() {
   const text = await loadGreeting();
   if (!('speechSynthesis' in window)) { alert(text); return; }
   const utter = new SpeechSynthesisUtterance(text);
-  utter.rate = 1.0; utter.pitch = 1.0; utter.lang = 'en-US';
+  utter.rate = 1; utter.pitch = 1; utter.lang = 'en-US';
   window.speechSynthesis.cancel();
   window.speechSynthesis.speak(utter);
 }
 
-document.getElementById('btnGreet').addEventListener('click', speakGreeting);
-document.getElementById('btnRefresh').addEventListener('click', async()=>{
-  await fetch('/trigger-morning', {method:'POST'});
+// ----- BOOT ------------------------------------------------------------------
+document.addEventListener('DOMContentLoaded', () => {
+  loadData();
 
+  // make sure these IDs match your HTML
+  document.getElementById('refreshBtn')?.addEventListener('click', loadData);
+  document.getElementById('playBtn')?.addEventListener('click', speakGreeting);
+
+  // optional: POST to refresh server-side cache if you have that route
+  document.getElementById('btnRefresh')?.addEventListener('click', async () => {
+    try { await fetch('/trigger-morning', { method: 'POST' }); } catch {}
+  });
+
+  // prime greeting
+  loadGreeting();
 });
-
-loadGreeting();
-
