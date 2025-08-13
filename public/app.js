@@ -25,7 +25,7 @@ function renderReddit(items) {
     el.className = 'card';
 
     // Use item.image with robust fallbacks
-    const imgSrc   = item.image || item.thumbnail || 'fallback-image.jpg';
+    const imgSrc = item.image || 'https://picsum.photos/seed/pr1sm/1200/600';
     const title    = item.title || 'No title';
     const sub      = item.sub || 'Unknown';
     const ups      = item.ups != null ? Number(item.ups).toLocaleString() : '0';
