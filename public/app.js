@@ -7,12 +7,10 @@ async function fetchJSON(url) {
   return r.json();
 }
 
-/* ---------------------------- RENDERERS ---------------------------- */
+/* ---------------- RENDERERS ---------------- */
 
 function renderReddit(items) {
-  // Match your HTML id
-  const root = document.getElementById('reddit-grid');
-  if (!root) return;
+  const root = document.getElementById('reddit');
   root.innerHTML = '';
 
   if (!Array.isArray(items) || items.length === 0) {
@@ -20,44 +18,43 @@ function renderReddit(items) {
     return;
   }
 
-  items.forEach(item => {
+  items.forEach((item) => {
     const el = document.createElement('article');
     el.className = 'card';
 
-    // Use item.image with robust fallbacks
-    const imgSrc = item.image || 'https://picsum.photos/seed/pr1sm/1200/600';
-    const title    = item.title || 'No title';
-    const sub      = item.sub || 'Unknown';
-    const ups      = item.ups != null ? Number(item.ups).toLocaleString() : '0';
-    const permalink= item.permalink || '#';
+    const imgSrc    = item.image || '/fallback.jpg'; // put a tiny placeholder in /public if you like
+    const title     = item.title || 'No title';
+    const sub       = item.sub || 'Unknown';
+    const ups       = item.ups != null ? Number(item.ups).toLocaleString() : '0';
+    const permalink = item.permalink || '#';
 
     el.innerHTML = `
-      <div class="media">
-        <img src="${imgSrc}" alt="${title}" loading="lazy"
-             onerror="this.onerror=null;this.src='fallback-image.jpg';" />
-      </div>
-      <div class="body">
-        <div class="meta">
-          <span class="chip">r/${sub}</span>
-          <span>•</span>
-          <span>↑ ${ups}</span>
-        </div>
+      <img class="thumb" src="${imgSrc}" alt="${title}">
+      <div class="meta">
         <div class="title">${title}</div>
-      </div>
-      <div class="actions">
-        <a class="btn" href="${permalink}" target="_blank" rel="noopener">Open</a>
-        <a class="btn ghost" href="${permalink}#comment" target="_blank" rel="noopener">Comment</a>
+        <div class="sub">r/${sub} • ↑ ${ups}</div>
+        <div class="actions">
+          <a class="btn" href="${permalink}" target="_blank" rel="noopener">Open</a>
+          <a class="btn" href="${permalink}#comment" target="_blank" rel="noopener">Comment</a>
+        </div>
       </div>
     `;
+
+    // robust image fallback for i.redd.it 403/deleted images
+    const img = el.querySelector('img.thumb');
+    img.addEventListener('error', () => {
+      img.src = '/fallback.jpg'; // ensure you have this file in /public
+      img.alt = 'Image unavailable';
+    });
+
     root.appendChild(el);
   });
 }
 
 function renderYouTube(items) {
-  const ul = document.getElementById('youtube-list');
-  if (!ul) return;
+  const ul = document.getElementById('youtube');
   ul.innerHTML = '';
-  (items || []).forEach(v => {
+  (items || []).forEach((v) => {
     const li = document.createElement('li');
     li.innerHTML = `<a href="${v.url}" target="_blank" rel="noopener"><span class="dot"></span>${v.title}</a>`;
     ul.appendChild(li);
@@ -65,26 +62,24 @@ function renderYouTube(items) {
 }
 
 function renderTerms(items) {
-  const box = document.getElementById('trending-list');
-  if (!box) return;
-  box.innerHTML = '';
-  (items || []).forEach(t => {
-    const a = document.createElement('a');
-    a.href = '#';
-    a.innerHTML = `<span class="dot"></span>${t}`;
-    box.appendChild(a);
+  const ul = document.getElementById('terms');
+  ul.innerHTML = '';
+  (items || []).forEach((t) => {
+    const li = document.createElement('li');
+    li.textContent = t;
+    ul.appendChild(li);
   });
 }
 
-/* ----------------------------- LOADER ----------------------------- */
+/* ---------------- LOADERS ---------------- */
 
 async function loadData() {
   try {
     const pack = await fetchJSON('/data/morning.json');
-    window.__DATA = pack; // debug helper in DevTools
+    window.__DATA = pack; // for quick inspection in DevTools
 
-    // sanity log
     console.log('[PR1SM] morning.json', {
+      ok: true,
       updated_at: pack.updated_at,
       first: pack?.reddit_top?.[0]
     });
@@ -94,19 +89,21 @@ async function loadData() {
     renderTerms(pack.trending_terms || []);
 
     const ts = pack.updated_at ? new Date(pack.updated_at) : new Date();
-    const updatedEl = document.getElementById('updatedAt');
+    const updatedEl = document.getElementById('updated');
     if (updatedEl) updatedEl.textContent = 'Last updated: ' + ts.toLocaleString();
   } catch (err) {
     console.error('[PR1SM] loadData error:', err);
+    const root = document.getElementById('reddit');
+    if (root) root.innerHTML = `<p style="opacity:.7">Failed to load morning.json. Check console.</p>`;
   }
 }
 
 async function loadGreeting() {
   try {
     const g = await fetchJSON('/greeting');
-    const el = document.getElementById('greeting');
-    if (el && g?.text) el.textContent = g.text;
-    return g.text || 'Good morning, Benedict.';
+    const el = document.getElementById('greetingText');
+    if (el) el.textContent = g.text;
+    return g.text;
   } catch {
     return 'Good morning, Benedict.';
   }
@@ -115,24 +112,16 @@ async function loadGreeting() {
 async function speakGreeting() {
   const text = await loadGreeting();
   if (!('speechSynthesis' in window)) { alert(text); return; }
-  const utter = new SpeechSynthesisUtterance(text);
-  utter.rate = 1; utter.pitch = 1; utter.lang = 'en-US';
-  window.speechSynthesis.cancel();
-  window.speechSynthesis.speak(utter);
+  const u = new SpeechSynthesisUtterance(text);
+  u.rate = 1; u.pitch = 1; u.lang = 'en-US';
+  speechSynthesis.cancel(); speechSynthesis.speak(u);
 }
 
-/* ------------------------------ BOOT ------------------------------ */
+/* ---------------- BOOT ---------------- */
 
 document.addEventListener('DOMContentLoaded', () => {
   loadData();
-  loadGreeting();
-
   document.getElementById('refreshBtn')?.addEventListener('click', loadData);
   document.getElementById('playBtn')?.addEventListener('click', speakGreeting);
-
-  // optional server-side refresh endpoint
-  document.getElementById('btnRefresh')?.addEventListener('click', async () => {
-    try { await fetch('/trigger-morning', { method: 'POST' }); } catch {}
-  });
+  loadGreeting();
 });
-
